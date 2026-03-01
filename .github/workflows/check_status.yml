@@ -1,6 +1,8 @@
 name: Update RO Status
 
 on:
+permissions:
+  contents: write
   schedule:
     # Запуск каждые 5 минут (стандартное ограничение GitHub)
     - cron: '*/5 * * * *'
