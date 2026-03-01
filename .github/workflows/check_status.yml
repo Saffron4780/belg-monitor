@@ -1,0 +1,34 @@
+name: Update RO Status
+
+on:
+  schedule:
+    # Запуск каждые 5 минут (стандартное ограничение GitHub)
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Позволяет запустить вручную кнопкой
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run parser
+        run: python main.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add status.json
+          git commit -m "Update status [skip ci]" || exit 0
+          git push
